@@ -4,6 +4,8 @@ const app = express();
 
 const Port = process.env.Port || 3000 ;
 
+app.use( express.json() );
+
 const users =   [ { id: 1 , username : "Benzineb Mohamed" , age : 23 , insta : "mhs_dz" }
                 , { id: 2 , username : "laila" , age : 22 , insta : "Unknown" }
                 , { id: 3 , username : "meriem" , age : 22 , insta : "Unknown" }
@@ -47,6 +49,14 @@ app.get( "/api/product" , ( req , res ) => {
     res.status(201).send( { product : [ { id: 1 , name : "Laptop" , price : 80000 , brand : "Dell" }
                                     , { id: 2 , name : "Phone" , price : 50000 , brand : "Samsung" }
     ] } );
+})
+
+app.post( "/api/users" , ( req , res ) => {
+    console.log(req.body);
+    const { body } = req ;
+    const newUser = { id : users[users.length - 1].id + 1 , ...body } ;
+    users.push( newUser );
+    return res.status(201).send( { users });
 })
 
 
