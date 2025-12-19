@@ -6,7 +6,7 @@ const Port = process.env.Port || 3000 ;
 
 app.use( express.json() );
 
-const users =   [ { id: 1 , username : "Benzineb Mohamed" , age : 23 , insta : "mhs_dz" }
+const users =   [ { id: 1 , username : "Benzineb Mohamed" , age : 24 , insta : "mhs_dz" }
                 , { id: 2 , username : "laila" , age : 22 , insta : "Unknown" }
                 , { id: 3 , username : "meriem" , age : 22 , insta : "Unknown" }
                 , { id: 4 , username : "futureMe" , age : 25 , insta : "Startup" }
@@ -60,6 +60,16 @@ app.post( "/api/users" , ( req , res ) => {
 })
 
 app.put( "/api/users/:id" , ( req , res ) => {
+    const { body , params : { id } } = req ;
+    const idParsed = parseInt(id);
+    if( isNaN(idParsed)) return res.status(400).send( { msg : "Invalid Request"} );
+    const userIndex = users.findIndex( (user) => user.id === idParsed );
+    if ( userIndex === -1 ) return res.status(404).send( { msg : "User not found"} );
+    users[userIndex] = { id : idParsed , ...body } ;
+    return res.status(201).send( { users } );
+})
+
+app.patch( "/api/users/:id" , ( req , res ) => {
     const { body , params : { id } } = req ;
     const idParsed = parseInt(id);
     if( isNaN(idParsed)) return res.status(400).send( { msg : "Invalid Request"} );
