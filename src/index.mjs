@@ -59,6 +59,16 @@ app.post( "/api/users" , ( req , res ) => {
     return res.status(201).send( { users });
 })
 
+app.put( "/api/users/:id" , ( req , res ) => {
+    const { body , params : { id } } = req ;
+    const idParsed = parseInt(id);
+    if( isNaN(idParsed)) return res.status(400).send( { msg : "Invalid Request"} );
+    const userIndex = users.findIndex( (user) => user.id === idParsed );
+    if ( userIndex === -1 ) return res.status(404).send( { msg : "User not found"} );
+    users[userIndex] = { ...users[userIndex] , ...body } ;
+    return res.status(201).send( { users } );
+})
+
 
 app.listen(Port , () => {
     console.log(`Server is running on port ${Port}`);
