@@ -18,3 +18,28 @@ export const UserValidationSchemas = {
         }
     }
 }
+
+export const ProductValidationSchemas = {
+    name : {
+        isString : {
+            errorMessage : "Product name must be a string",
+        },
+        notEmpty : {
+            errorMessage : "Product name must be a non empty string",
+        }
+    },
+    price : {
+        isFloat : {
+            options : { min : 0 },
+            errorMessage : "Price must be a positive number",
+        }
+    },
+    brand : {
+        isString : {
+            errorMessage : "Brand must be a string",
+        },
+        notEmpty : {
+            errorMessage : "Brand must be a non empty string",
+        }
+    }
+}
