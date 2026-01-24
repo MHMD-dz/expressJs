@@ -1,4 +1,6 @@
 import express from "express";
+import { query , validationResult , body , matchedData , checkSchema } from "express-validator";
+import { UserValidationSchemas } from "./utils/validationSchemas.mjs";
 
 const app = express();
 
@@ -6,6 +8,8 @@ const loggingMiddleware = ( req , res , next ) => {
     console.log( `${ req.method } ${ req.url }` );
     next();
 }
+
+
 
 const handleFindUserByID = ( req , res , next ) => {
     const {  params : { id } } = req ;
@@ -48,18 +52,29 @@ app.get( "/api/users" , ( req , res ) => {
     res.status(201).send( { users } );
 })
 
-app.get( "/api/usersm" , ( req , res ) => {
-    console.log(req.query);
-    const { query : { filter , value } } = req;
-    
-    if( filter && value ) {
-        return res.status(201).send(users.filter( (user) => user[filter].includes(value )) );
-    }
-    return res.status(201).send( { users } );
+app.get( "/api/usersm" , 
+    query("value").isString()
+                  .withMessage("Value must be a string") 
+                  .notEmpty()
+                  .withMessage("Value must be a non empty string")
+                  .isLength( { min : 4 , max : 20 })
+                  .withMessage("Must be at least 4 chars and max 20 chars"),  
+    ( req , res ) => {
+        const result = validationResult(req);
+        console.log(result);
+        console.log(req.query);
+        const { query : { filter , value } } = req;
+        
+        if( filter && value ) {
+            return res.status(201).send(users.filter( (user) => user[filter].includes(value )) );
+        }
+        return res.status(201).send( { users } );
 })
 
 
-app.get( "/api/users/:id" , handleFindUserByID , ( req , res ) => {
+app.get( "/api/users/:id" , query("userIndex").isString() ,  handleFindUserByID , ( req , res ) => {
+    const result = validationResult(req);
+    console.log(result);
     const { userIndex } = req ;
     const user = users[userIndex] ;
     res.status(201).send( `The user id is : ${user.id}
@@ -74,15 +89,22 @@ app.get( "/api/product" , ( req , res ) => {
     ] } );
 })
 
-app.post( "/api/users" , ( req , res ) => {
-    console.log(req.body);
-    const { body } = req ;
-    const newUser = { id : users[users.length - 1].id + 1 , ...body } ;
-    users.push( newUser );
-    return res.status(201).send( { users });
+app.post( "/api/users" ,
+    checkSchema(UserValidationSchemas) , 
+    ( req , res ) => {
+        const result = validationResult(req);
+        console.log(result);
+        if( !result.isEmpty() ) {
+            return res.status(400).send( { errors : result.array().map( (error) => error.msg ) } );
+        }
+        const data = matchedData(req);
+        console.log(data);
+        const newUser = { id : users[users.length - 1].id + 1 , ...data } ;
+        users.push( newUser );
+        return res.status(201).send( { users });
 })
 
-app.put( "/api/users/:id" , handleFindUserByID , ( req , res ) => {
+app.put( "/api/users/:id" ,  handleFindUserByID , ( req , res ) => {
     const { body , userIndex } = req ;
     
     users[userIndex] = { id : users[userIndex].id , ...body } ;
