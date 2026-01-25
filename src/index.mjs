@@ -1,7 +1,5 @@
 import express from "express";
-import { users } from "./utils/constantDb.mjs";
-import usersRouter from "./routes/usersRoutes.mjs";
-import productRouter from "./routes/productRouter.mjs";
+import indexRouter from "./routes/index.mjs";
 
 
 const app = express();
@@ -13,8 +11,7 @@ const Port = process.env.Port || 3000 ;
 
 app.use( express.json() );
 
-app.use( usersRouter );
-app.use( productRouter );
+app.use(indexRouter);
 
 
 app.get( "/" , ( req , res , next ) => {
