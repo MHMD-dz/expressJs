@@ -10,11 +10,15 @@ const productRouter = Router();
 productRouter.get( "/api/products" ,
     ( req , res ) => {
         const { query : { filter , value } } = req;
+        console.log(req.cookies);
+        console.log(req.signedCookies.hello);
 
         if( filter && value ) {
             return res.status(201).send(products.filter( (product) => product[filter].toString().includes(value )) );
         }
-        return res.status(201).send( { products } );
+        if (req.signedCookies.hello && req.signedCookies.hello === "world") {
+        return res.status(201).send( { products } );}
+        return res.status(401).send( { msg : "Unauthorized"} );
 })
 
 productRouter.get( "/api/products/:id" , handleFindProductByID , ( req , res ) => {
