@@ -9,6 +9,8 @@ const usersRouter = Router();
 
 usersRouter.get( "/api/users" , 
     ( req , res ) => {
+        console.log(req.session);
+        console.log(req.session.id);
         
         return res.status(201).send( { users } );
 })
