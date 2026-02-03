@@ -1,12 +1,12 @@
-export const users =   [ { id: 1 , username : "Benzineb Mohamed" , age : 24 , insta : "mhs_dz"  }
-                , { id: 2 , username : "laila"            , age : 22 , insta : "Unknown" }
-                , { id: 3 , username : "meriem"           , age : 22 , insta : "Unknown" }
-                , { id: 4 , username : "futureMe"         , age : 25 , insta : "Startup" }
-                , { id: 5 , username : "ahmed"            , age : 24 , insta : "Unknown" }
-                , { id: 6 , username : "alaa"             , age : 20 , insta : "Unknown" }
-                , { id: 7 , username : "younaaaaas"       , age : 20 , insta : "Unknown" }
-                , { id: 8 , username : "hassaan"          , age : 20 , insta : "Unknown" }
-            ];
+export const users =    [ { id: 1 , username : "Benzineb Mohamed" , age : 24 , insta : "mhs_dz"  , password : "1234" }
+                        , { id: 2 , username : "laila"            , age : 22 , insta : "Unknown" , password : "5678" }
+                        , { id: 3 , username : "lilian"           , age : 22 , insta : "Unknown" , password : "9101" }
+                        , { id: 4 , username : "futureMe"         , age : 25 , insta : "Startup" , password : "1213" }
+                        , { id: 5 , username : "ahmed"            , age : 24 , insta : "Unknown" , password : "0123" }
+                        , { id: 6 , username : "alaa"             , age : 20 , insta : "Unknown" , password : "4567" }
+                        , { id: 7 , username : "younaaaaas"       , age : 20 , insta : "Unknown" , password : "7890" }
+                        , { id: 8 , username : "hassaan"          , age : 20 , insta : "Unknown" , password : "2003" }
+                    ];
 
 export const products = [   { id: 1 , name : "Laptop"   , price : 80000 , brand : "Dell"     },
                             { id: 2 , name : "Phone"    , price : 50000 , brand : "Samsung"  },

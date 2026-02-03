@@ -16,6 +16,14 @@ export const UserValidationSchemas = {
             options : { min : 18 , max : 30 },
             errorMessage : "Age must between 18 & 30",
         }
+    },
+    password : {
+        isString : {
+            errorMessage : "Password must be a string",
+        },
+        notEmpty : {
+            errorMessage : "Password must be a non empty string",
+        }
     }
 }
 
