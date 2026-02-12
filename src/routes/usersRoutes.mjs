@@ -3,6 +3,7 @@ import { query , validationResult , body , matchedData , checkSchema } from "exp
 import { UserValidationSchemas } from "../utils/validationSchemas.mjs";
 import { users } from "../utils/constantDb.mjs";
 import { handleFindUserByID } from "../utils/MiddleWares.mjs";
+import passport from "passport";
 
 const usersRouter = Router();
 
@@ -92,6 +93,24 @@ usersRouter.delete( "/api/users/:id" , handleFindUserByID , ( req , res ) => {
     const { userIndex } = req ;
     users.splice( userIndex , 1 );
     return res.status(201).send( { users } );
+})
+
+usersRouter.post("/api/users/auth" , passport.authenticate("local") , ( req , res ) => {
+    res.sendStatus(200);
+})
+
+usersRouter.post("/api/users/logout" , ( req , res ) => {
+    req.logout( (err) => {
+        if (err) { return next(err); }
+        res.sendStatus(200);
+    } );
+})
+
+usersRouter.get("/api/user/status" , ( req , res ) => {
+    console.log("inside status route");
+    console.log(req.session);
+    console.log(req.user);
+    return req.user ? res.send(req.user) : res.sendStatus(401);   
 })
 
 export default usersRouter;

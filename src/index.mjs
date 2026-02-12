@@ -5,6 +5,8 @@ import session from "express-session";
 import { matchedData, checkSchema, validationResult } from "express-validator";
 import { UserValidationSchemas } from "./utils/validationSchemas.mjs";
 import { users } from "./utils/constantDb.mjs";
+import passport from "passport";
+import "./strategies/localStrategy.mjs";
 
 const app = express();
 
@@ -24,6 +26,10 @@ app.use( session(
         store : new session.MemoryStore() ,
     }
 ) );
+
+app.use( passport.initialize() );
+app.use( passport.session() );
+
 app.use(indexRouter);
 
 
