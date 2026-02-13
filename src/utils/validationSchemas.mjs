@@ -1,4 +1,10 @@
 export const UserValidationSchemas = {
+    id : {
+        isInt : {
+            options : { min : 1 },
+            errorMessage : "ID must be a positive integer",
+        }
+    },
     username : {
         isString : {
             errorMessage : "Username must be a string",
@@ -15,6 +21,14 @@ export const UserValidationSchemas = {
         isInt : {
             options : { min : 18 , max : 30 },
             errorMessage : "Age must between 18 & 30",
+        }
+    },
+    insta : {
+        isString : {
+            errorMessage : "Insta must be a string",
+        },
+        notEmpty : {
+            errorMessage : "Insta must be a non empty string",
         }
     },
     password : {

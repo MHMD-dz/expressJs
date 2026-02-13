@@ -4,6 +4,8 @@ import { UserValidationSchemas } from "../utils/validationSchemas.mjs";
 import { users } from "../utils/constantDb.mjs";
 import { handleFindUserByID } from "../utils/MiddleWares.mjs";
 import passport from "passport";
+import mongoose from "mongoose";
+import { User } from "../mongoose/Schemas/user.mjs";
 
 const usersRouter = Router();
 
@@ -49,6 +51,7 @@ usersRouter.get( "/api/usersm" , checkSchema( {
         return res.status(201).send( { users } );
 })
 
+/* before using mongoose
 usersRouter.post( "/api/users" ,
     checkSchema(UserValidationSchemas) , 
     ( req , res ) => {
@@ -62,6 +65,25 @@ usersRouter.post( "/api/users" ,
         const newUser = { id : users[users.length - 1].id + 1 , ...data } ;
         users.push( newUser );
         return res.status(201).send( { users });
+})
+*/
+// after mongoose
+usersRouter.post( "/api/users" , checkSchema(UserValidationSchemas) , async ( req , res ) => {
+    const result = validationResult(req);
+    if( !result.isEmpty() ) {
+            return res.status(400).send( { errors : result.array().map( (error) => error.msg ) } );
+        }
+    const data = matchedData(req);
+    console.log(data);
+    try {
+        const newUser = new User( data );
+        const savedUser = await newUser.save();
+        return res.status(201).send( savedUser );
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send( { message : "Internal Server Error" } );
+    }
+
 })
 
 usersRouter.get( "/api/users/:id" , query("userIndex").isString() ,  handleFindUserByID , ( req , res ) => {

@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { users } from "../utils/constantDb.mjs";
+import { User } from "../mongoose/Schemas/user.mjs";
 
 
 passport.serializeUser((user , done )=>{
@@ -9,11 +9,11 @@ passport.serializeUser((user , done )=>{
     done(null , user.id);
 })
 
-passport.deserializeUser((id , done )=>{
+passport.deserializeUser( async (id , done )=>{
     console.log(`inside deserializeUser`);
     console.log(id);
     try {
-        const findUser = users.find( (user) => user.id === id );
+        const findUser = await User.findOne( { id } );
         if (!findUser) throw new Error("User not found");
         done(null , findUser);
     } catch (error) {
@@ -23,11 +23,11 @@ passport.deserializeUser((id , done )=>{
 })
 
 export default passport.use(
-    new Strategy((username , password , done)=>{
+    new Strategy( async (username , password , done)=>{
         console.log(`username: ${username}`);
         console.log(`password: ${password}`);
         try {
-            const findUser = users.find( (user) => user.username === username );
+            const findUser = await User.findOne( { username } );
             if (!findUser) throw new Error("User not found");
             if( findUser.password !== password ) throw new Error("Incorrect password");
             done(null , findUser);

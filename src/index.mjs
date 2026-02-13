@@ -6,10 +6,14 @@ import { matchedData, checkSchema, validationResult } from "express-validator";
 import { UserValidationSchemas } from "./utils/validationSchemas.mjs";
 import { users } from "./utils/constantDb.mjs";
 import passport from "passport";
+import mongoose from "mongoose";
 import "./strategies/localStrategy.mjs";
 
 const app = express();
 
+mongoose.connect("mongodb://localhost:27017/expressDB")
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) => console.error("Could not connect to MongoDB", err));
 
 // app.use( loggingMiddleware );
 
@@ -48,7 +52,7 @@ app.get( "/" , ( req , res , next ) => {
 })
 
 
-app.post('/api/auth' , checkSchema({ username: UserValidationSchemas.username, password: UserValidationSchemas.password })
+app.post('/api/auth' , checkSchema(UserValidationSchemas)
                      , (req , res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
