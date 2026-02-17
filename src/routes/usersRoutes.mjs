@@ -6,6 +6,7 @@ import { handleFindUserByID } from "../utils/MiddleWares.mjs";
 import passport from "passport";
 import mongoose from "mongoose";
 import { User } from "../mongoose/Schemas/user.mjs";
+import { hashPassword } from "../utils/helper.mjs";
 
 const usersRouter = Router();
 
@@ -74,6 +75,8 @@ usersRouter.post( "/api/users" , checkSchema(UserValidationSchemas) , async ( re
             return res.status(400).send( { errors : result.array().map( (error) => error.msg ) } );
         }
     const data = matchedData(req);
+    console.log(data);
+    data.password = hashPassword(data.password);
     console.log(data);
     try {
         const newUser = new User( data );
